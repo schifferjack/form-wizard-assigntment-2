@@ -1,0 +1,159 @@
+<h2 class="text-3xl">HTML with Tailwind CSS</h2>
+<div class="w-full px-8 py-4">
+    <div class="relative flex items-center justify-between w-full">
+        <div class="absolute left-0 top-2/4 h-0.5 w-full -translate-y-2/4 bg-gray-300"></div>
+        <div
+            class="absolute left-0 top-2/4 h-0.5 w-[calc(33.33%*{{ currentStep }})] -translate-y-2/4 bg-gray-900 transition-all duration-500">
+        </div>
+
+        <!-- Step Indicators -->
+        <div [ngClass]="{'bg-red-500 text-white': currentStep >= 1, 'bg-gray-300 text-gray-900': currentStep < 1}"
+            class="relative z-10 grid w-10 h-10 font-bold rounded-full place-items-center">
+            1
+        </div>
+        <div [ngClass]="{'bg-red-500 text-white': currentStep >= 2, 'bg-gray-300 text-gray-900': currentStep < 2}"
+            class="relative z-10 grid w-10 h-10 font-bold rounded-full place-items-center">
+            2
+        </div>
+        <div [ngClass]="{'bg-red-500 text-white': currentStep >= 3, 'bg-gray-300 text-gray-900': currentStep < 3}"
+            class="relative z-10 grid w-10 h-10 font-bold rounded-full place-items-center">
+            3
+        </div>
+    </div>
+
+    <form [formGroup]="getCurrentFormGroup()" (ngSubmit)="submitForm()" class="mt-4">
+        <!-- First Step -->
+        @if (currentStep === 1) {
+        <div>
+            <div>
+                <label for="name" class="block text-sm font-medium leading-6 text-white">Name</label>
+                <div class="mt-2">
+                    <input type="text" id="name" formControlName="name"
+                        class="ps-2 block w-full rounded-md border-0 py-1.5 text-gray-900">
+                    @if (getCurrentFormGroup().get('name')?.touched && getCurrentFormGroup().get('name')?.invalid) {
+                    <div class="text-red-500 text-sm mt-2">
+                        @if (getCurrentFormGroup().get('name')?.errors?.['required']) {
+                        <div>Name is required</div>
+                        }
+                        @if (getCurrentFormGroup().get('name')?.errors?.['minlength']) {
+                        <div>Name must be at least 5 characters long</div>
+                        }
+                    </div>
+                    }
+
+                </div>
+            </div>
+            <div class="mt-4">
+                <label for="password" class="block text-sm font-medium leading-6 text-white">Password</label>
+                <div class="mt-2">
+                    <input type="password" id="password" formControlName="password"
+                        class="ps-2 block w-full rounded-md border-0 py-1.5 text-gray-900">
+                    @if (getCurrentFormGroup().get('password')?.touched &&
+                    getCurrentFormGroup().get('password')?.invalid) {
+                    <div class="text-red-500 text-sm mt-2">
+                        @if (getCurrentFormGroup().get('password')?.errors?.['required']) {<div>Password is required
+                        </div>}
+                        @if (getCurrentFormGroup().get('password')?.errors?.['minlength']) {<div>Password must
+                            be at
+                            least 8 characters long</div>}
+
+                    </div>
+                    }
+
+                </div>
+            </div>
+        </div>
+        }
+
+
+        <!-- Second Step -->
+        <div *ngIf="currentStep === 2">
+            <div>
+                <label for="address1" class="block text-sm font-medium leading-6 text-white">Address 1</label>
+                <div class="mt-2">
+                    <input type="text" id="address1" formControlName="address1"
+                        class="ps-2 block w-full rounded-md border-0 py-1.5 text-gray-900">
+                    @if (getCurrentFormGroup().get('address1')?.touched &&
+                    getCurrentFormGroup().get('address1')?.invalid) {
+                    <div class="text-red-500 text-sm mt-2">
+                        @if (getCurrentFormGroup().get('address1')?.errors?.['required']) {<div>Address 1 is required
+                        </div>}
+                    </div>
+                    }
+
+                </div>
+            </div>
+            <div class="mt-4">
+                <label for="address2" class="block text-sm font-medium leading-6 text-white">Address 2</label>
+                <div class="mt-2">
+                    <input type="text" id="address2" formControlName="address2"
+                        class="ps-2 block w-full rounded-md border-0 py-1.5 text-gray-900">
+                    @if (getCurrentFormGroup().get('address2')?.touched &&
+                    getCurrentFormGroup().get('address2')?.invalid) {
+                    <div class="text-red-500 text-sm mt-2">
+                        @if (getCurrentFormGroup().get('address2')?.errors?.['required']) {<div>Address 2 is
+                            required
+                        </div>}
+                    </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Third Step -->
+        <div *ngIf="currentStep === 3">
+            <div>
+                <label for="poscode" class="block text-sm font-medium leading-6 text-white">Postcode</label>
+                <div class="mt-2">
+                    <input type="text" id="poscode" formControlName="poscode"
+                        class="ps-2 block w-full rounded-md border-0 py-1.5 text-gray-900">
+                    @if (getCurrentFormGroup().get('poscode')?.touched && getCurrentFormGroup().get('poscode')?.invalid)
+                    {
+                    <div class="text-red-500 text-sm mt-2">
+                        @if (getCurrentFormGroup().get('poscode')?.errors?.['required']) {
+                        <div>Postcode is required
+                        </div>
+                        }
+                    </div>
+                    }
+                </div>
+            </div>
+            <div class="mt-4">
+                <label for="email" class="block text-sm font-medium leading-6 text-white">Email</label>
+                <div class="mt-2">
+                    <input type="email" id="email" formControlName="email"
+                        class="ps-2 block w-full rounded-md border-0 py-1.5 text-gray-900">
+                    @if (getCurrentFormGroup().get('email')?.touched && getCurrentFormGroup().get('email')?.invalid) {
+                    <div class="text-red-500 text-sm mt-2">
+                        @if (getCurrentFormGroup().get('email')?.errors?.['required']) {<div>Email is required
+                        </div>}
+                        @if (getCurrentFormGroup().get('email')?.errors?.['email']) {<div>Invalid email format
+                        </div>}
+                        @if (getCurrentFormGroup().get('email')?.errors?.['emailTaken']) {<div>Email is already
+                            taken</div>}
+                    </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="flex justify-end mt-6 gap-4">
+            @if(currentStep !== 1){<button type="button" (click)="goBack()"
+                class="select-none rounded-lg bg-gray-500 py-3 px-6 text-white hover:bg-gray-300"
+                [disabled]="currentStep === 1">
+                Prev
+            </button>}
+            @if (currentStep !== 3) {
+            <button type="button" (click)="goNext()"
+                class="select-none rounded-lg bg-blue-500 py-3 px-6 text-white hover:bg-blue-300 disabled:bg-gray-400"
+                [disabled]="asyncTaskInProgress">
+                Next
+            </button>
+            }
+            @if (currentStep === 3) {<button type="submit"
+                class="select-none rounded-lg bg-green-500 py-3 px-6 text-white">
+                Submit
+            </button>}
+        </div>
+    </form>
+</div>
