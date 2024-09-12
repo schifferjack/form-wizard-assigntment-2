@@ -1,12 +1,10 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import {
-  AbstractControl,
   FormBuilder,
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
-  ValidationErrors,
   Validators,
 } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -17,6 +15,8 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { WizardTailwindComponent } from './wizard-tailwind/wizard-tailwind.component';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { emails } from './email';
+import { EmailServiceService } from './email-service.service';
+import { EmailValidator } from './email-validator';
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -46,7 +46,7 @@ export class AppComponent {
 
   constructor(
     private _formBuilder: FormBuilder,
-    private http: HttpClient,
+    private emailService: EmailServiceService,
   ) {
     this.firstFormGroup = this._formBuilder.group({
       name: ['', [Validators.required, Validators.minLength(5)]],
@@ -61,7 +61,7 @@ export class AppComponent {
       email: [
         '',
         [Validators.required, Validators.email],
-        [this.emailAsyncValidator.bind(this)],
+        [EmailValidator.createValidator(this.emailService)],
       ],
     });
   }
@@ -101,18 +101,6 @@ export class AppComponent {
     if (formGroup) {
       formGroup.markAllAsTouched();
     }
-  }
-  emailAsyncValidator(
-    control: AbstractControl,
-  ): Observable<ValidationErrors | null> {
-    return this.http.get<any>('https://dummyjson.com/users').pipe(
-      map((response) => {
-        const takenEmails = response.users.map((user: any) => user.email);
-        return takenEmails.includes(control.value)
-          ? { emailTaken: true }
-          : null;
-      }),
-    );
   }
   submitForm() {
     console.log({

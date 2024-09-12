@@ -12,6 +12,8 @@ import {
   AsyncValidatorFn,
 } from '@angular/forms';
 import { Observable, delay, map, of } from 'rxjs';
+import { EmailServiceService } from '../email-service.service';
+import { EmailValidator } from '../email-validator';
 
 @Component({
   selector: 'app-wizard-tailwind',
@@ -29,7 +31,7 @@ export class WizardTailwindComponent {
 
   constructor(
     private _formBuilder: FormBuilder,
-    private http: HttpClient,
+    private emailService: EmailServiceService,
   ) {
     this.firstFormGroup = this._formBuilder.group({
       name: ['', [Validators.required, Validators.minLength(5)]],
@@ -44,7 +46,7 @@ export class WizardTailwindComponent {
       email: [
         '',
         [Validators.required, Validators.email],
-        [this.emailAsyncValidator.bind(this)],
+        [EmailValidator.createValidator(this.emailService)],
       ],
     });
   }
@@ -89,10 +91,6 @@ export class WizardTailwindComponent {
 
   submitForm() {
     this.markFormGroupTouched(this.getCurrentFormGroup());
-    console.log(
-      this.getCurrentFormGroup().get('poscode')?.invalid,
-      this.getCurrentFormGroup().get('email')?.invalid,
-    );
     if (this.getCurrentFormGroup().valid) {
       console.log('Form Data:', {
         ...this.firstFormGroup.value,
@@ -100,19 +98,6 @@ export class WizardTailwindComponent {
         ...this.thirdFormGroup.value,
       });
     }
-  }
-
-  emailAsyncValidator(
-    control: AbstractControl,
-  ): Observable<ValidationErrors | null> {
-    return this.http.get<any>('https://dummyjson.com/users').pipe(
-      map((response) => {
-        const takenEmails = response.users.map((user: any) => user.email);
-        return takenEmails.includes(control.value)
-          ? { emailTaken: true }
-          : null;
-      }),
-    );
   }
 
   performAsyncCheck(): Observable<boolean> {
