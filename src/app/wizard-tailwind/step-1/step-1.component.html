@@ -1,0 +1,38 @@
+<div [formGroup]="formGroup">
+    <div>
+        <label for="name" class="block text-sm font-medium leading-6 text-white">Name</label>
+        <div class="mt-2">
+            <input type="text" id="name" formControlName="name"
+                class="ps-2 block w-full rounded-md border-0 py-1.5 text-gray-900">
+            @if (formGroup.get('name')?.touched && formGroup.get('name')?.invalid) {
+            <div class="text-red-500 text-sm mt-2">
+                @if (formGroup.get('name')?.errors?.['required']) {
+                <div>Name is required</div>
+                }
+                @if (formGroup.get('name')?.errors?.['minlength']) {
+                <div>Name must be at least 5 characters long</div>
+                }
+            </div>
+            }
+
+        </div>
+    </div>
+    <div class="mt-4">
+        <label for="password" class="block text-sm font-medium leading-6 text-white">Password</label>
+        <div class="mt-2">
+            <input type="password" id="password" formControlName="password"
+                class="ps-2 block w-full rounded-md border-0 py-1.5 text-gray-900">
+            @if (formGroup.get('password')?.touched &&
+            formGroup.get('password')?.invalid) {
+            <div class="text-red-500 text-sm mt-2">
+                @if (formGroup.get('password')?.errors?.['required']) {<div>Password is required
+                </div>}
+                @if (formGroup.get('password')?.errors?.['minlength']) {<div>Password must
+                    be at
+                    least 8 characters long</div>}
+
+            </div>
+            }
+        </div>
+    </div>
+</div>

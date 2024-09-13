@@ -14,11 +14,20 @@ import {
 import { Observable, delay, map, of } from 'rxjs';
 import { EmailServiceService } from '../email-service.service';
 import { EmailValidator } from '../email-validator';
+import { Step1Component } from './step-1/step-1.component';
+import { Step2Component } from './step-2/step-2.component';
+import { Step3Component } from './step-3/step-3.component';
 
 @Component({
   selector: 'app-wizard-tailwind',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    Step1Component,
+    Step2Component,
+    Step3Component,
+  ],
   templateUrl: './wizard-tailwind.component.html',
   styleUrl: './wizard-tailwind.component.css',
 })
